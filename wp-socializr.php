@@ -26,7 +26,7 @@ Text Domain: wp-socializr
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define('WP_SOCIALIZR_DEBUG', /*false*/'http://comic.omocoro.jp' );
+define('WP_SOCIALIZR_DEBUG', false );
 
 define('WP_SOCIALIZR_PREFIX', 'wp_socializr_');
 define('WP_SOCIALIZR_INTERVAL', 1 * 60 * 60);
