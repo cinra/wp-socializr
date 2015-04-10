@@ -30,6 +30,8 @@ $id|int|記事ID（$post->ID）
 
 ### Socialzr
 
+クロールの際の初期設定を行うクラス
+
 ## ヘルパー
 
 ### wp_socializr_crawl()
