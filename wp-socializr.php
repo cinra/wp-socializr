@@ -45,6 +45,12 @@ class Crawler implements socializrTemplate {
   static $count;
   static $comments;
 
+  /**
+   * Crawler::count 記事IDに対する各SNSの言及数を取得する
+   * @param  string $provider SNSのスラッグ（例：facebook）
+   * @param  int $id       記事ID（$post->ID）
+   * @return void
+   */
   public static function count($provider, $id = null)
   {
 
@@ -52,6 +58,12 @@ class Crawler implements socializrTemplate {
 
   }
 
+  /**
+   * Crawler::get_comment 記事IDに対する各SNSの言及を取得して、記事に対するコメントとして登録する
+   * @param  string $provider SNSのスラッグ（例：facebook）
+   * @param  int $id       記事ID（$post->ID）
+   * @return void
+   */
   public static function get_comment($provider, $id = null)
   {
 
@@ -63,21 +75,21 @@ class Crawler implements socializrTemplate {
       if (!is_array(self::$comments)) self::$comments = array(self::$comments);
 
       $meta_key = $provider.'_id';
-      
+
       error_log($meta_key);
 
       foreach (self::$comments as $key => $comment)
       {
 
         $c = $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM wp_commentmeta WHERE meta_key = %s AND meta_value = %s", $meta_key, $key));
-        
+
         error_log($wpdb->prepare("SELECT count(*) FROM wp_commentmeta WHERE meta_key = %s AND meta_value = %s", $meta_key, $key));
-        
+
         if ($c == 0)
         {
-          
+
           error_log('new comment');
-          
+
           $comment_id = wp_insert_comment($comment['comment']);
           if ($comment_id && isset($comment['meta']) && $comment['meta'])
           {
@@ -120,9 +132,8 @@ class Socializr
 define('CRON_SCHEDULE_HANDLER', 'wp_socializr_crawl');
 
 // Add Schedules
-
 $crons = _get_cron_array();
-#echo '<pre>';echo time().'<br />';print_r($crons);echo '</pre>';exit;
+
 $is_crawl = false;
 foreach ($crons as $time => $tasks)
 {
@@ -162,12 +173,12 @@ function wp_socializr_crawl()
 
       foreach ($s->providerPaths as $path)
       {
-        
+
         $basename = basename($path);
         $classname = ucfirst($basename).'_Crawler';
 
         include_once($path.'/crawler.php');
-        
+
         if (get_option(WP_SOCIALIZR_PREFIX.$basename.'_use_counter')) $classname::count($basename, $post->ID);
         if (get_option(WP_SOCIALIZR_PREFIX.$basename.'_use_comment')) $classname::get_comment($basename, $post->ID);
 
@@ -234,7 +245,6 @@ $s = new Socializr();
 
 if ($_POST['is_submit'] == 1)
 {
-  #echo '<pre>';print_r($_POST);echo '</pre>';exit;
   foreach ($_POST as $k => $v)
   {
     if (preg_match('(^'.$prefix.')', $k))
