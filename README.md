@@ -13,7 +13,7 @@
 #### Crawler::count( string $provider, int $id )
 
 arg|type|description
-===|===|===
+---|---|---
 $provider|string|SNSのスラッグ（例：facebook）
 $id|int|記事ID（$post->ID）
 
